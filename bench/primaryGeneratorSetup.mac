@@ -1,0 +1,13 @@
+#------------------------------------------------------------------------------------
+# primaryGeneratorSetup.mac: Set up the primary generator environment
+#  [Note] Geant4 Tutorial for Hep/Medicine Users: 2016.11.29 @Sendai 
+#------------------------------------------------------------------------------------
+
+## Particle type
+/gun/particle ion
+/gun/ion 11 22
+
+## Kinematical information
+/gun/position  -1.0  0.0  0.0 cm
+/gun/direction +1.0  0.0  0.0
+

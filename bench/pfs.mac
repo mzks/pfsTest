@@ -1,0 +1,34 @@
+## Mizukoshi Keita
+
+## Particle type
+/gun/particle ion
+/gun/ion 11 22
+/gun/energy 0.0 eV
+
+## Kinematical information
+/gun/position  -1.0  0.0  0.0 cm
+/gun/direction +1.0  0.0  0.0
+
+## coloring by Particle ID
+/vis/modeling/trajectories/create/drawByParticleID Color
+/vis/modeling/trajectories/Color/set e- blue
+/vis/modeling/trajectories/Color/set e+ red
+/vis/modeling/trajectories/Color/set gamma green
+#/vis/modeling/trajectories/Color/set nu_e yellow
+#/vis/modeling/trajectories/Color/default/setDrawStepPts true
+/vis/modeling/trajectories/Color/default/setStepPtsSize 5
+#/vis/modeling/trajectories/Color/default/setDrawAuxPts true
+/vis/modeling/trajectories/Color/default/setAuxPtsSize 5
+/control/alias interval 0,01
+/control/alias halfInterval 0,005
+#/vis/modeling/trajectories/Color/default/setTimeSliceInterval {interval} ns
+/vis/modeling/trajectories/list
+
+#Remove nu
+/vis/filtering/trajectories/create/particleFilter ColorFilter
+/vis/filtering/trajectories/ColorFilter/add nu_e
+/vis/filtering/trajectories/ColorFilter/add gamma
+/vis/filtering/trajectories/ColorFilter/invert true
+
+/run/beamOn 100
+
