@@ -109,7 +109,7 @@ G4VPhysicalVolume* Geometry::Construct()
 			"solid22NaCaseBottom",
 			0,
 			8.0/2.0 * mm,
-			4.0 / 2.0 * mm,
+			2.0 / 2.0 * mm,
 			0.0,
 			CLHEP::twopi);
 
@@ -150,14 +150,34 @@ G4VPhysicalVolume* Geometry::Construct()
 			false,				//set to false
 			9001,			//copy number
 			true);			// check
+	
+	new G4PVPlacement( 
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(0,0,-1.5*mm)), //rotation and vector
+			logBottom22NaCase,	//logical volume
+			"physEnv22NaCaseBottom",//name
+			logenv22NaCase, //mother logicall volume
+			false,				//set to false
+			9002,			//copy number
+			true);			// check
 
+	new G4PVPlacement( 
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(0,0,2.0*mm)), //rotation and vector
+			logWindow22NaCase,	//logical volume
+			"physEnv22NaCaseWindow",//name
+			logenv22NaCase, //mother logicall volume
+			false,				//set to false
+			9003,			//copy number
+			true);			// check
+
+
+	//Set source case to world
 	new G4PVPlacement(
 			G4Transform3D(),
 			"sourceCase",
 			logenv22NaCase,
 		   	physVol_World, 
 			false,
-			9002,
+			9004,
 			true);
 			
 			
