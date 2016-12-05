@@ -175,7 +175,7 @@ G4VPhysicalVolume* Geometry::Construct()
 	mat_source.rotateY(90 * deg);
 
 	new G4PVPlacement(
-			G4Transform3D(mat_source,G4ThreeVector(-1.0 *cm,0,0)),
+			G4Transform3D(mat_source,G4ThreeVector((-1.0+0.25) *cm,0,0)),
 			"sourceCase",
 			logenv22NaCase,
 		   	physVol_World, 
@@ -183,6 +183,57 @@ G4VPhysicalVolume* Geometry::Construct()
 			9004,
 			true);
 			
+
+	//Scilica Gel difinition
+	G4Box* solidEnvGelCase = new G4Box("silicagelCase", 10.0 * mm /2.0, 10.0 * mm /2.0, 10.0 * mm /2.0);
+	G4Box* solidSilicagel = new G4Box("solidSilicagel", (9.0 - 0.15) /2.0 * mm, 8.0/2.0  * mm, 8.0/2.0  * mm);
+	G4Box* solidTriggerSci = new G4Box("solidTriggerSci",0.15 /2.0 * mm,8.0 / 2.0 * mm ,8.0 /2.0 * mm);
+
+	G4LogicalVolume* logEnvGelCase = new G4LogicalVolume(
+			solidEnvGelCase,
+			Al,
+			"logEnvGelCase",
+			0,0,0,true);
+	G4LogicalVolume* logSilicagel = new G4LogicalVolume(
+			solidSilicagel,
+			SilicaGel,
+			"logSilicagel",
+			0,0,0,true);
+	G4LogicalVolume* logTriggerSci = new G4LogicalVolume(
+			solidTriggerSci,
+			Sci,
+			"logTriggerSci",
+			0,0,0,true);
+
+	new G4PVPlacement( 
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-0.4250*mm,0,0)), //rotation and vector
+			logSilicagel,	//logical volume
+			"physSilicaGel",//name
+			logEnvGelCase, //mother logicall volume
+			false,				//set to false
+			3001,			//copy number
+			true);			// check
+
+	new G4PVPlacement( 
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-4.925*mm,0,0)), //rotation and vector
+			logTriggerSci,	//logical volume
+			"physTriggerSci",//name
+			logEnvGelCase, //mother logicall volume
+			false,				//set to false
+			3002,			//copy number
+			true);			// check
+
+	//set to world
+	G4RotationMatrix mat_silica  = G4RotationMatrix();
+	mat_source.rotateY(-90 * deg);
+	new G4PVPlacement(
+			G4Transform3D(mat_silica,G4ThreeVector(0*cm,0,0)),
+			"silicaCase",
+			logEnvGelCase,
+		   	physVol_World, 
+			false,
+			3003,
+			true);
 			
 	
 	//NaI
