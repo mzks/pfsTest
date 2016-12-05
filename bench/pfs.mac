@@ -27,7 +27,7 @@
 #Remove nu
 /vis/filtering/trajectories/create/particleFilter ColorFilter
 /vis/filtering/trajectories/ColorFilter/add nu_e
-/vis/filtering/trajectories/ColorFilter/add gamma
+#/vis/filtering/trajectories/ColorFilter/add gamma
 /vis/filtering/trajectories/ColorFilter/invert true
 
 /run/beamOn 100

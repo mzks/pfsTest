@@ -117,7 +117,7 @@ G4VPhysicalVolume* Geometry::Construct()
 			"solid22NaCaseWindow",
 			0,
 			8.0/2.0 * mm,
-			1 / 2.0 * um,
+			0.1 / 2.0 * mm,
 			0.0,
 			CLHEP::twopi);
 	
@@ -171,8 +171,11 @@ G4VPhysicalVolume* Geometry::Construct()
 
 
 	//Set source case to world
+	G4RotationMatrix mat_source  = G4RotationMatrix();
+	mat_source.rotateY(90 * deg);
+
 	new G4PVPlacement(
-			G4Transform3D(),
+			G4Transform3D(mat_source,G4ThreeVector(-1.0 *cm,0,0)),
 			"sourceCase",
 			logenv22NaCase,
 		   	physVol_World, 
