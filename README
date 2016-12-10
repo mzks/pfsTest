@@ -1,7 +1,10 @@
+pfsTest
+Positronium fine structure measurement geometry test
 
 Author: Mizukoshi Keita
+This source and macro including many sample code using Geant4 Lecture 2016 in Sendai.
+I would like to thank their first authers in Geant4 collaboration and KEK.
 
-Physics Lists : BGE
-
+Macros
 bench/pfs.mac visualize and 22Na source
 
