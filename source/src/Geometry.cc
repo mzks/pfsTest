@@ -15,6 +15,8 @@
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
+#include "SensitiveVolume.hh"
+#include "G4SDManager.hh"
 
 //------------------------------------------------------------------------------
 Geometry::Geometry() {}
@@ -47,6 +49,7 @@ G4VPhysicalVolume* Geometry::Construct()
 	G4Element* H  = new G4Element("Hydrogen",symbol="H" , z= 1., a= 1.01*g/mole);
 
 	G4Material* Al = new G4Material("Aluminum", z=13., a=26.98*g/mole, density=2.700*g/cm3);
+	G4Material* Fe = materi_Man->FindOrBuildMaterial("G4_Fe");
 
 	G4Material* Sci = new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
 	Sci->AddElement(C, natoms=9);
@@ -138,7 +141,8 @@ G4VPhysicalVolume* Geometry::Construct()
 			0,0,0,true);
 	G4LogicalVolume* logWindow22NaCase = new G4LogicalVolume(
 			solid22NaCaseWindow,
-			Al,
+			//Al,
+			materi_World,
 			"logWindow22NaCase",
 			0,0,0,true);
 
@@ -191,7 +195,7 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	G4LogicalVolume* logEnvGelCase = new G4LogicalVolume(
 			solidEnvGelCase,
-			Al,
+			Fe,
 			"logEnvGelCase",
 			0,0,0,true);
 	G4LogicalVolume* logSilicagel = new G4LogicalVolume(
@@ -213,6 +217,12 @@ G4VPhysicalVolume* Geometry::Construct()
 			false,				//set to false
 			3001,			//copy number
 			true);			// check
+
+	// Sensitivevolume
+	SensitiveVolume* aSV = new SensitiveVolume("SensitiveVolume");
+	logTriggerSci->SetSensitiveDetector(aSV);
+	G4SDManager* SDMan = G4SDManager::GetSDMpointer();
+	SDMan->AddNewDetector(aSV);
 
 	new G4PVPlacement( 
 			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-4.925*mm,0,0)), //rotation and vector

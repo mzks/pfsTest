@@ -5,8 +5,11 @@
 /gun/ion 11 22
 /gun/energy 0.0 eV
 
+#/gun/particle geantino
+#/gun/energy 1.0 MeV
+
 ## Kinematical information
-/gun/position  -1.0  0.0  0.0 cm
+/gun/position  -0.6  0.0  0.0 cm
 /gun/direction +1.0  0.0  0.0
 
 ## coloring by Particle ID
@@ -27,8 +30,8 @@
 #Remove nu
 /vis/filtering/trajectories/create/particleFilter ColorFilter
 /vis/filtering/trajectories/ColorFilter/add nu_e
-#/vis/filtering/trajectories/ColorFilter/add gamma
+/vis/filtering/trajectories/ColorFilter/add gamma
 /vis/filtering/trajectories/ColorFilter/invert true
 
-/run/beamOn 100
+/run/beamOn 1
 
