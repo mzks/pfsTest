@@ -14,9 +14,11 @@
 #include "G4NistManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"	
 #include "G4Element.hh"
-#include "SensitiveVolume.hh"
 #include "G4SDManager.hh"
+#include "PltTargetSD.hh"
+#include "PltSensorSD.hh"
 
 //------------------------------------------------------------------------------
 Geometry::Geometry() {}
@@ -30,6 +32,20 @@ Geometry::~Geometry() {}
 G4VPhysicalVolume* Geometry::Construct()
 	//------------------------------------------------------------------------------
 {
+
+	// Sensitive Detectors
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  PltSensorSD* aSensorSD = (PltSensorSD*)SDman->FindSensitiveDetector( "Plt/SensorSD");
+  if ( aSensorSD == 0){
+    aSensorSD = new PltSensorSD(  "Plt/SensorSD" );
+    SDman->AddNewDetector( aSensorSD );
+  }
+  PltTargetSD* aTargetSD = (PltTargetSD*)SDman->FindSensitiveDetector( "Plt/TargetSD");
+  if ( aTargetSD == 0){
+    aTargetSD = new PltTargetSD(  "Plt/TargetSD" );
+    SDman->AddNewDetector( aTargetSD );
+  }
+
 	// Get pointer to 'Material Manager'
 	G4NistManager* materi_Man = G4NistManager::Instance();
 
@@ -63,6 +79,9 @@ G4VPhysicalVolume* Geometry::Construct()
 	NaI->AddElement(Na, natoms=1);
 	NaI->AddElement(I , natoms=1);
 	NaI->GetIonisation()->SetMeanExcitationEnergy(452*eV);
+
+	// For some test
+	G4Material* vac    = materi_Man->FindOrBuildMaterial("G4_Galactic");
 
 	// Define 'World Volume'
 	// Define the shape of solid
@@ -126,7 +145,7 @@ G4VPhysicalVolume* Geometry::Construct()
 	
 	G4LogicalVolume* logenv22NaCase = new G4LogicalVolume(
 			env22NaCase,
-			Sci,
+			vac,
 			"logenv22NaCase",
 			0,0,0,true);
 	G4LogicalVolume* logSide22NaCase = new G4LogicalVolume(
@@ -141,8 +160,8 @@ G4VPhysicalVolume* Geometry::Construct()
 			0,0,0,true);
 	G4LogicalVolume* logWindow22NaCase = new G4LogicalVolume(
 			solid22NaCaseWindow,
-			//Al,
-			materi_World,
+			Al,
+			//vac,
 			"logWindow22NaCase",
 			0,0,0,true);
 
@@ -209,6 +228,8 @@ G4VPhysicalVolume* Geometry::Construct()
 			"logTriggerSci",
 			0,0,0,true);
 
+	logSilicagel->SetSensitiveDetector(aTargetSD);
+
 	new G4PVPlacement( 
 			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-0.4250*mm,0,0)), //rotation and vector
 			logSilicagel,	//logical volume
@@ -218,11 +239,6 @@ G4VPhysicalVolume* Geometry::Construct()
 			3001,			//copy number
 			true);			// check
 
-	// Sensitivevolume
-	SensitiveVolume* aSV = new SensitiveVolume("SensitiveVolume");
-	logTriggerSci->SetSensitiveDetector(aSV);
-	G4SDManager* SDMan = G4SDManager::GetSDMpointer();
-	SDMan->AddNewDetector(aSV);
 
 	new G4PVPlacement( 
 			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-4.925*mm,0,0)), //rotation and vector
@@ -261,6 +277,7 @@ G4VPhysicalVolume* Geometry::Construct()
 
 
 	G4LogicalVolume* logNaI = new G4LogicalVolume(solidNaI,NaI,"logNaI",0,0,0);
+	logNaI->SetSensitiveDetector(aSensorSD);
 
 	G4double pos_X_LogV = 0.0*cm;           // X-location LogV 
 	G4double pos_Y_LogV = 0.0*cm;           // Y-location LogV
