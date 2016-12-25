@@ -9,7 +9,7 @@
 #/gun/energy 1.0 MeV
 
 ## Kinematical information
-#/gun/position  -0.6  0.0  0.0 cm
+/gun/position  -5.6  0.0  0.0 cm
 #/gun/direction +1.0  0.0  0.0
 
 ## coloring by Particle ID
@@ -30,9 +30,9 @@
 #Remove nu
 /vis/filtering/trajectories/create/particleFilter ColorFilter
 /vis/filtering/trajectories/ColorFilter/add nu_e
-#/vis/filtering/trajectories/ColorFilter/add gamma
+/vis/filtering/trajectories/ColorFilter/add gamma
 /vis/filtering/trajectories/ColorFilter/invert true
 
-/run/beamOn 100000
-#/run/beamOn 10
+#/run/beamOn 100000
+/run/beamOn 100
 

@@ -66,6 +66,8 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	G4Material* Al = new G4Material("Aluminum", z=13., a=26.98*g/mole, density=2.700*g/cm3);
 	G4Material* Fe = materi_Man->FindOrBuildMaterial("G4_Fe");
+	G4Material* Pb = materi_Man->FindOrBuildMaterial("G4_Pb");
+	//G4Material* Pb = new G4Material("Lead"     , z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
 
 	G4Material* Sci = new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
 	Sci->AddElement(C, natoms=9);
@@ -110,7 +112,7 @@ G4VPhysicalVolume* Geometry::Construct()
 				false,
 			   	copyNum_World);
 
-	//Parameters
+	//case
 	G4Tubs* env22NaCase = new G4Tubs(
 			"env22NaCase",
 			0,
@@ -142,6 +144,8 @@ G4VPhysicalVolume* Geometry::Construct()
 			0.1 / 2.0 * mm,
 			0.0,
 			CLHEP::twopi);
+
+
 	
 	G4LogicalVolume* logenv22NaCase = new G4LogicalVolume(
 			env22NaCase,
@@ -164,6 +168,12 @@ G4VPhysicalVolume* Geometry::Construct()
 			//vac,
 			"logWindow22NaCase",
 			0,0,0,true);
+
+	//collimator
+	G4Box* solidCollimator = new G4Box("solidCollimator",100.0* mm /2.0, 100.0* mm/2.0, 100.0*mm/2.0);
+	G4LogicalVolume* logCollimator = new G4LogicalVolume(solidCollimator,Pb,"logCollimator",0,0,0,true);
+	G4Tubs* solidBlank = new G4Tubs("solidBrank",0,8.0*mm/2.0,47.5*mm/2.0,0,CLHEP::twopi);
+	G4LogicalVolume* logBlank = new G4LogicalVolume(solidBlank,materi_World,"logBlank",0,0,0,true);
 
 	new G4PVPlacement( 
 			G4Transform3D(), //rotation and vector
@@ -198,12 +208,31 @@ G4VPhysicalVolume* Geometry::Construct()
 	mat_source.rotateY(90 * deg);
 
 	new G4PVPlacement(
-			G4Transform3D(mat_source,G4ThreeVector((-1.0+0.25) *cm,0,0)),
-			"sourceCase",
+			G4Transform3D(mat_source,G4ThreeVector(0 *cm,0,0)),
 			logenv22NaCase,
-		   	physVol_World, 
+			"sourceCase",
+			logCollimator,
 			false,
 			9004,
+			true);
+
+	new G4PVPlacement(
+			G4Transform3D(mat_source,G4ThreeVector(26.25 *mm,0,0)),
+			logBlank,
+			"blankInLead",
+			logCollimator,
+			false,
+			9005,
+			true);
+
+	//World
+	new G4PVPlacement(
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector((-5.0-0.75)*cm,0,0)),
+			"sourceBox",
+			logCollimator,
+		   	physVol_World, 
+			false,
+			10000,
 			true);
 			
 
@@ -211,6 +240,7 @@ G4VPhysicalVolume* Geometry::Construct()
 	G4Box* solidEnvGelCase = new G4Box("silicagelCase", 10.0 * mm /2.0, 10.0 * mm /2.0, 10.0 * mm /2.0);
 	G4Box* solidSilicagel = new G4Box("solidSilicagel", (9.0 - 0.15) /2.0 * mm, 8.0/2.0  * mm, 8.0/2.0  * mm);
 	G4Box* solidTriggerSci = new G4Box("solidTriggerSci",0.15 /2.0 * mm,8.0 / 2.0 * mm ,8.0 /2.0 * mm);
+
 
 	G4LogicalVolume* logEnvGelCase = new G4LogicalVolume(
 			solidEnvGelCase,
