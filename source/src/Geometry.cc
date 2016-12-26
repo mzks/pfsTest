@@ -19,9 +19,12 @@
 #include "G4SDManager.hh"
 #include "PltTargetSD.hh"
 #include "PltSensorSD.hh"
+#include "G4UniformMagField.hh"
 
 //------------------------------------------------------------------------------
-Geometry::Geometry() {}
+Geometry::Geometry()
+	:magField(0)
+{}
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -350,6 +353,28 @@ G4VPhysicalVolume* Geometry::Construct()
 
 
 
+	SetMagField(0.1 * tesla);
 	// Return the physical world
 	return physVol_World;
+}
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+void Geometry::SetMagField(G4double value){
+	//apply a global uniform magnetic field along Z axis                         
+	G4FieldManager* fieldMgr                                                     
+		= G4TransportationManager::GetTransportationManager()->GetFieldManager();   
+
+	if(magField) delete magField;     //delete the existing magn field           
+
+	if(value!=0.){            // create a new one if non nul                     
+		fieldValue = value;
+		magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));         
+		fieldMgr->SetDetectorField(magField);                                      
+		fieldMgr->CreateChordFinder(magField);                                     
+	} else {
+		magField = 0;
+		fieldMgr->SetDetectorField(magField);                                      
+	}
 }

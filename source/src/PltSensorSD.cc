@@ -151,20 +151,25 @@ void PltSensorSD::EndOfEvent(G4HCofThisEvent* HCE)
     }
 
 	//hit
-	if(tHit != 0) outFile << "HIT!" << G4endl;
-
+	if(tHit != 0) {
     outFile << hit->GetTrackID() <<" " 
 	    << hit->GetPDGcode() <<" " 
-	    //<< hit->GetCharge()/eplus <<" " 
 	    << hit->GetEnergy()/MeV  <<" " 
-	    //<< hit->GetMomentum().x()/MeV  <<" " 
-	    //<< hit->GetMomentum().y()/MeV  <<" "
-	    //<< hit->GetMomentum().z()/MeV  <<" "
-		//<< hit->GetTime()/ns <<" "
 		<< ch << " "
-		<< NbHits << " "
-		<< tHit << " "
+		<< tHit->GetEnergy()/MeV << " "
+		<< (tHit->GetPos()).getX() << " "
+		<< (tHit->GetPos()).getY() << " "
+		<< (tHit->GetPos()).getZ() << " "
 	    << G4endl;
+	}else{
+    outFile << hit->GetTrackID() <<" " 
+	    << hit->GetPDGcode() <<" " 
+	    << hit->GetEnergy()/MeV  <<" " 
+		<< ch << " "
+		<< "-1 0 0 0"
+	    << G4endl;
+	}
+
 
 
 //    G4int ch_a = 100+ch;

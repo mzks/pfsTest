@@ -35,7 +35,8 @@ public:
   G4int GetPDGcode()            const  { return codePDG; };
   G4int GetTrackID()            const  { return trackID; };
   G4double GetEnergy()          const  { return energy; };      
-  const G4ThreeVector& GetPos() const  { return pos; };
+  //const G4ThreeVector& GetPos() const  { return pos; };
+  const G4ThreeVector GetPos() const  { return pos; };
         
 private:
   G4int         sensorID;
