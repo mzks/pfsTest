@@ -1,12 +1,12 @@
 ## Mizukoshi Keita
 
 ## Particle type
-/gun/particle ion
-/gun/ion 11 22
-/gun/energy 0.0 eV
+#/gun/particle ion
+#/gun/ion 11 22
+#/gun/energy 0.0 eV
 
-#/gun/particle geantino
-#/gun/energy 1.0 MeV
+/gun/particle e+
+/gun/energy 0.5 MeV
 
 ## Kinematical information
 /gun/position  -5.6  0.0  0.0 cm
@@ -33,6 +33,6 @@
 #/vis/filtering/trajectories/ColorFilter/add gamma
 /vis/filtering/trajectories/ColorFilter/invert true
 
-#/run/beamOn 100000
-/run/beamOn 10000000
+/run/beamOn 100000
+#/run/beamOn 100
 

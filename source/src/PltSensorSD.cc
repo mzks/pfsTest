@@ -157,9 +157,9 @@ void PltSensorSD::EndOfEvent(G4HCofThisEvent* HCE)
 	    << hit->GetEnergy()/MeV  <<" " 
 		<< ch << " "
 		<< tHit->GetEnergy()/MeV << " "
-		<< (tHit->GetPos()).getX() << " "
-		<< (tHit->GetPos()).getY() << " "
-		<< (tHit->GetPos()).getZ() << " "
+		<< (tHit->GetPos()).getX()/mm << " "
+		<< (tHit->GetPos()).getY()/mm << " "
+		<< (tHit->GetPos()).getZ()/mm << " "
 	    << G4endl;
 	}else{
     outFile << hit->GetTrackID() <<" " 
@@ -170,6 +170,7 @@ void PltSensorSD::EndOfEvent(G4HCofThisEvent* HCE)
 	    << G4endl;
 	}
 
+	//hit->Print();
 
 
 //    G4int ch_a = 100+ch;

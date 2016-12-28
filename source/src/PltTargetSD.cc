@@ -50,7 +50,7 @@ G4bool PltTargetSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   const G4Track * aTrack =  aStep->GetTrack();
   // Check Track ID
-  if (aTrack->GetTrackID()!=1) return false;
+  //if (aTrack->GetTrackID()!=1) return false;
   // Check Particle ID is e+ 
   if (aTrack->GetDefinition()->GetPDGEncoding()!=-11) return false;
   
