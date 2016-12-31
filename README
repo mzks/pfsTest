@@ -12,7 +12,7 @@ bench/pfs.mac visualize and 22Na source
 ## How to run
 
 #. Edit library data
- Change $G4ENSDFSTATEDATA/ENSDFSTATE.dat
+ Change 22Na life time in $G4ENSDFSTATEDATA/ENSDFSTATE.dat 
 
 2278c2278
 edited	<    11   22               0    1.184957e+01    6    8.81866805e-27
@@ -20,8 +20,14 @@ edited	<    11   22               0    1.184957e+01    6    8.81866805e-27
 original>    11   22               0    1.184957e+17    6    8.81866805e-27
 
 #. build
-in /build, run ./b.sh
+in build, run ./b.sh
 
 #. run
-in /bench ../bin/Application_Main (Qt, and so on - visualizer ON)
-in /bench ../bin/Application_Main pfs.mac(batch mode)
+in bench ../bin/Application_Main (Qt, and so on - visualizer ON)
+in bench ../bin/Application_Main pfs.mac(batch mode)
+
+-> Generated pfs.dat in /bench
+
+#. Fill Tree
+in analysis, run filltree.
+this generate data.root in analysis.
