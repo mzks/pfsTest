@@ -1,4 +1,4 @@
-TARGET = main
+TARGET = filltree
 
 SRCS = $(TARGET).C
 OBJS = $(TARGET).o

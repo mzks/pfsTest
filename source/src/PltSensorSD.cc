@@ -145,7 +145,7 @@ void PltSensorSD::EndOfEvent(G4HCofThisEvent* HCE)
     if (hit->GetEdep() < eThreshold ) continue;
 
     if (isFirstHit) {
-      outFile << "#EV." << eventId << G4endl;
+      outFile << "#EV " << eventId << G4endl;
       isFirstHit = false;
       hasHit = true;
     }

@@ -86,7 +86,7 @@ void PltTargetSD::EndOfEvent(G4HCofThisEvent*)
 	//G4cout <<  "Hit!" << G4endl;
 	//eventId++;
 
-	if (verboseLevel>1){(*targetCollection)[0]->Print();}
+	//if (verboseLevel>1){(*targetCollection)[0]->Print();}
 }
 
 
