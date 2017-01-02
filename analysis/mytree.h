@@ -2,7 +2,7 @@
 // This class has been automatically generated on
 // Mon Jan  2 12:01:28 2017 by ROOT version 6.06/04
 // from TTree mytree/geometry test
-// found on file: data.root
+// found on file: real.root
 //////////////////////////////////////////////////////////
 
 #ifndef mytree_h
@@ -64,9 +64,9 @@ mytree::mytree(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("data.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("real.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("data.root");
+         f = new TFile("real.root");
       }
       f->GetObject("mytree",tree);
 

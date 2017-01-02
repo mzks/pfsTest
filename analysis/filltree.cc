@@ -18,7 +18,7 @@
 using namespace std;
 
 int main(){
-	ifstream ifs("../bench/test4.dat"); // raw data file
+	ifstream ifs("../bench/pfs.dat"); // raw data file
 	//ifstream ifs("../bench/pfs.dat"); // raw data file
 	string buffer;
 	vector<string> result;

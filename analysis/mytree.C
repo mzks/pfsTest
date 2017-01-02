@@ -6,6 +6,7 @@
 
 void mytree::Loop()
 {
+
 //   In a ROOT session, you can do:
 //      root> .L mytree.C
 //      root> mytree t
@@ -36,15 +37,28 @@ void mytree::Loop()
    Long64_t nentries = fChain->GetEntriesFast();
 
    Long64_t nbytes = 0, nb = 0;
+   int coinc = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
 	  
-	  for(int i=0;i<E->size();i++){
-	  cout << event  << ": " << code->at(i) << ": " << E->at(i) << endl;
+	  int nhit = E->size();
+	  int evehit = 0;
+	  
+	  for(int i=0;i<nhit;i++){
+		  if(code->at(i) == 22 && E->at(i) > 0) evehit++;
+	  //cout << event  << ": " << code->at(i) << ": " << E->at(i) << endl;
 	  }
+	 if (evehit >1 ){
+		 cout << "event:" << event << endl;
+		 for(int i=0; i<nhit; i++){
+			 if(code->at(i) == 22 && E->at(i) > 0) cout << sensor->at(i) << ":" << E->at(i) << endl;
+		 }
+		 coinc++;
+	 } 
 	  
    }
+   cout << "total coincidense:" << coinc << endl;
 }
