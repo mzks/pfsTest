@@ -18,7 +18,8 @@
 using namespace std;
 
 int main(){
-	ifstream ifs("../bench/pfs.dat"); // raw data file
+	ifstream ifs("../bench/test4.dat"); // raw data file
+	//ifstream ifs("../bench/pfs.dat"); // raw data file
 	string buffer;
 	vector<string> result;
 	string delim(" "); // delimitor space
@@ -34,17 +35,17 @@ int main(){
 	vector<Double_t>	Y;
 	vector<Double_t>	Z;
 
-	TTree* t = new TTree("t","geometry test");
+	TTree* mytree = new TTree("mytree","geometry test");
 
-	t->Branch("event",&event,"event/I");
-	t->Branch("track",&track);
-	t->Branch("code",&code);
-	t->Branch("E",&E);
-	t->Branch("sensor",&sensor);
-	t->Branch("targetE",&targetE);
-	t->Branch("X",&X);
-	t->Branch("Y",&Y);
-	t->Branch("Z",&Z);
+	mytree->Branch("event",&event,"event/I");
+	mytree->Branch("track",&track);
+	mytree->Branch("code",&code);
+	mytree->Branch("E",&E);
+	mytree->Branch("sensor",&sensor);
+	mytree->Branch("targetE",&targetE);
+	mytree->Branch("X",&X);
+	mytree->Branch("Y",&Y);
+	mytree->Branch("Z",&Z);
 
 	getline(ifs,buffer);
 	boost::split(result,buffer,boost::is_any_of(delim),boost::algorithm::token_compress_on);
@@ -55,7 +56,7 @@ int main(){
 
 		boost::split(result,buffer,boost::is_any_of(delim),boost::algorithm::token_compress_on);
 		if(buffer[0] == '#'){
-		t->Fill();
+		mytree->Fill();
 
 		//init vectors
 		track.clear();
@@ -80,8 +81,8 @@ int main(){
 		}
 
 	}
-	t->Fill();
-	t->Write();
+	mytree->Fill();
+	mytree->Write();
 	f->Close();
 	delete f;
 	return 0;

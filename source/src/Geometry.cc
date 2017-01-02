@@ -364,6 +364,7 @@ G4VPhysicalVolume* Geometry::Construct()
 
 
 	SetMagField(0.1 * tesla);
+	//SetMagField(-0.1 * tesla);
 	
 	// Return the physical world
 	//
