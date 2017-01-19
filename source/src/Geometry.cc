@@ -107,7 +107,10 @@ G4VPhysicalVolume* Geometry::Construct()
 	// Placement of logical volume
 	G4int copyNum_World = 0;               // Set ID number of world
 
+	const G4double sourceThickness = 5.0 * mm;
+
 	G4PVPlacement* physVol_World  = new G4PVPlacement(
+
 				G4Transform3D(),
 			   	"PhysVol_World",
 			   	logVol_World,	
@@ -128,7 +131,7 @@ G4VPhysicalVolume* Geometry::Construct()
 			"solid22NaCase",
 			8.0 /2.0 * mm,
 			25.0/2.0 * mm,
-			5.0 / 2.0 * mm,
+			sourceThickness /2.0,
 			0.0,
 			CLHEP::twopi);
 
@@ -172,10 +175,17 @@ G4VPhysicalVolume* Geometry::Construct()
 			"logWindow22NaCase",
 			0,0,0,true);
 
+	const G4double lengthCollimatorX = 75.0 * mm;
+	const G4double lengthCollimatorYZ = 50.0 * mm;
+
+	const G4double phiHoleCollimator = 16.0 * mm;
+	const G4double lengthHole = lengthCollimatorX-sourceThickness/2.0;
+
 	//collimator
-	G4Box* solidCollimator = new G4Box("solidCollimator",100.0* mm /2.0, 100.0* mm/2.0, 100.0*mm/2.0);
+	G4Box* solidCollimator = new G4Box("solidCollimator",lengthCollimatorX,lengthCollimatorYZ,lengthCollimatorYZ);
 	G4LogicalVolume* logCollimator = new G4LogicalVolume(solidCollimator,Pb,"logCollimator",0,0,0,true);
-	G4Tubs* solidBlank = new G4Tubs("solidBrank",0,8.0*mm/2.0,47.5*mm/2.0,0,CLHEP::twopi);
+
+	G4Tubs* solidBlank = new G4Tubs("solidBrank",0,phiHoleCollimator/2.0,lengthHole/2.0,0,CLHEP::twopi);
 	G4LogicalVolume* logBlank = new G4LogicalVolume(solidBlank,materi_World,"logBlank",0,0,0,true);
 
 	new G4PVPlacement( 
@@ -220,7 +230,7 @@ G4VPhysicalVolume* Geometry::Construct()
 			true);
 
 	new G4PVPlacement(
-			G4Transform3D(mat_source,G4ThreeVector(26.25 *mm,0,0)),
+			G4Transform3D(mat_source,G4ThreeVector(sourceThickness/2.0+lengthHole/2.0,0,0)),
 			logBlank,
 			"blankInLead",
 			logCollimator,
@@ -230,7 +240,7 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	//World
 	new G4PVPlacement(
-			G4Transform3D(G4RotationMatrix(),G4ThreeVector((-5.0-0.75)*cm,0,0)),
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-10.0*cm,0,0)),
 			"sourceBox",
 			logCollimator,
 		   	physVol_World, 
@@ -286,7 +296,7 @@ G4VPhysicalVolume* Geometry::Construct()
 	G4RotationMatrix mat_silica  = G4RotationMatrix();
 	mat_source.rotateY(-90 * deg);
 	new G4PVPlacement(
-			G4Transform3D(mat_silica,G4ThreeVector(0*cm,0,0)),
+			G4Transform3D(mat_silica,G4ThreeVector(0.5*cm-0.15*mm,0,0)),
 			"silicaCase",
 			logEnvGelCase,
 		   	physVol_World, 
@@ -314,21 +324,13 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	G4double pos_X_LogV = 0.0*cm;           // X-location LogV 
 	G4double pos_Y_LogV = 0.0*cm;           // Y-location LogV
-	G4double pos_Z_LogV = 10.0*cm;           // Z-location LogV
+	G4double pos_Z_LogV = 7.5*cm;           // Z-location LogV
 
 	G4ThreeVector threeVect_LogV = G4ThreeVector(pos_X_LogV, pos_Y_LogV, pos_Z_LogV);
 	G4RotationMatrix rotMtrx_LogV = G4RotationMatrix();
 	G4Transform3D trans3D_LogV = G4Transform3D(rotMtrx_LogV, threeVect_LogV);
 
-	G4int copyNum_LogV = 2;                // Set ID number of LogV
-	new G4PVPlacement(
-			trans3D_LogV,
-		   	"PhysVol_NaI",
-		   	logNaI,
-		   	physVol_World, 
-			false,
-		   	copyNum_LogV
-			,true);
+	G4int copyNum_LogV = 1;                // Set ID number of LogV
 
 	threeVect_LogV.rotateX(-45.0 * deg);
 	rotMtrx_LogV.rotateX(-45.0 * deg);
@@ -337,30 +339,18 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	threeVect_LogV.rotateX(90.0 * deg);
 	rotMtrx_LogV.rotateX(90.0 * deg);
+	copyNum_LogV = 2;                // Set ID number of LogV
+	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
+
+	threeVect_LogV.rotateX(90.0 * deg);
+	rotMtrx_LogV.rotateX(90.0 * deg);
 	copyNum_LogV = 3;                // Set ID number of LogV
 	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
 
-	threeVect_LogV.rotateX(45.0 * deg);
-	rotMtrx_LogV.rotateX(45.0 * deg);
+	threeVect_LogV.rotateX(90.0 * deg);
+	rotMtrx_LogV.rotateX(90.0 * deg);
 	copyNum_LogV = 4;                // Set ID number of LogV
 	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
-
-	threeVect_LogV.rotateX(45.0 * deg);
-	rotMtrx_LogV.rotateX(45.0 * deg);
-	copyNum_LogV = 5;                // Set ID number of LogV
-	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
-
-	threeVect_LogV.rotateX(45.0 * deg);
-	rotMtrx_LogV.rotateX(45.0 * deg);
-	copyNum_LogV = 6;                // Set ID number of LogV
-	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
-
-	threeVect_LogV.rotateX(45.0 * deg);
-	rotMtrx_LogV.rotateX(45.0 * deg);
-	copyNum_LogV = 7;                // Set ID number of LogV
-	new G4PVPlacement(G4Transform3D(rotMtrx_LogV,threeVect_LogV), "PhysVol_NaI", logNaI, physVol_World, false, copyNum_LogV,true);
-
-
 
 
 	//SetMagField(0.0 * tesla);
