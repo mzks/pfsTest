@@ -33,6 +33,7 @@
 #/vis/filtering/trajectories/ColorFilter/add gamma
 /vis/filtering/trajectories/ColorFilter/invert true
 
-/run/beamOn 10
-#/run/beamOn 10000000
+#/run/beamOn 10
+# 100 M envent
+/run/beamOn 100000000
 

@@ -250,14 +250,21 @@ G4VPhysicalVolume* Geometry::Construct()
 			
 
 	//Scilica Gel difinition
-	G4Box* solidEnvGelCase = new G4Box("silicagelCase", 10.0 * mm /2.0, 10.0 * mm /2.0, 10.0 * mm /2.0);
-	G4Box* solidSilicagel = new G4Box("solidSilicagel", (9.0 - 0.15) /2.0 * mm, 8.0/2.0  * mm, 8.0/2.0  * mm);
-	G4Box* solidTriggerSci = new G4Box("solidTriggerSci",0.15 /2.0 * mm,8.0 / 2.0 * mm ,8.0 /2.0 * mm);
+	
+	const G4double radiusSilicagel = 4.0 * mm;
+	const G4double depthSilicagel = 15.0 * mm;
+	const G4double targetBoxX = 20.0 * mm;
+	const G4double targetBoxYZ = 20.0 * mm;
+	const G4double thicknessPlasticScintillator = 0.15 * mm;
+
+	G4Box* solidEnvGelCase = new G4Box("silicagelCase", targetBoxX /2.0, targetBoxYZ/2.0, targetBoxYZ /2.0);
+	G4Tubs* solidSilicagel = new G4Tubs("solidSilicagel"  , 0, radiusSilicagel,depthSilicagel/2.0,0, CLHEP::twopi);
+	G4Tubs* solidTriggerSci = new G4Tubs("solidTriggerSci", 0, radiusSilicagel,thicknessPlasticScintillator/2.0,0, CLHEP::twopi);
 
 
 	G4LogicalVolume* logEnvGelCase = new G4LogicalVolume(
 			solidEnvGelCase,
-			Fe,
+			Sci,
 			"logEnvGelCase",
 			0,0,0,true);
 	G4LogicalVolume* logSilicagel = new G4LogicalVolume(
@@ -273,8 +280,12 @@ G4VPhysicalVolume* Geometry::Construct()
 
 	logSilicagel->SetSensitiveDetector(aTargetSD);
 
+	//set to world
+	G4RotationMatrix mat_silica  = G4RotationMatrix();
+	mat_silica.rotateY(-90 * deg);
+
 	new G4PVPlacement( 
-			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-0.4250*mm,0,0)), //rotation and vector
+			G4Transform3D(mat_silica,G4ThreeVector( -(targetBoxX/2.0 - thicknessPlasticScintillator/2.0 - thicknessPlasticScintillator - depthSilicagel/2.0)-thicknessPlasticScintillator/2.0,0,0)),
 			logSilicagel,	//logical volume
 			"physSilicaGel",//name
 			logEnvGelCase, //mother logicall volume
@@ -284,7 +295,7 @@ G4VPhysicalVolume* Geometry::Construct()
 
 
 	new G4PVPlacement( 
-			G4Transform3D(G4RotationMatrix(),G4ThreeVector(-4.925*mm,0,0)), //rotation and vector
+			G4Transform3D(mat_silica,G4ThreeVector( +thicknessPlasticScintillator - targetBoxX/2.0-thicknessPlasticScintillator/2.0,0,0)), //rotation and vector
 			logTriggerSci,	//logical volume
 			"physTriggerSci",//name
 			logEnvGelCase, //mother logicall volume
@@ -292,11 +303,8 @@ G4VPhysicalVolume* Geometry::Construct()
 			3002,			//copy number
 			true);			// check
 
-	//set to world
-	G4RotationMatrix mat_silica  = G4RotationMatrix();
-	mat_source.rotateY(-90 * deg);
 	new G4PVPlacement(
-			G4Transform3D(mat_silica,G4ThreeVector(0.5*cm-0.15*mm,0,0)),
+			G4Transform3D(G4RotationMatrix(),G4ThreeVector(0.5*cm-0.15*mm+5.0*mm,0,0)),
 			"silicaCase",
 			logEnvGelCase,
 		   	physVol_World, 
